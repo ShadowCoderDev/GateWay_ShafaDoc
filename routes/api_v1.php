@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\V1\Gateway\LoginGatewayController;
 use App\Http\Controllers\Api\V1\Gateway\LogoutGatewayController;
 use App\Http\Controllers\Api\V1\Gateway\AdminRegistrationGatewayController;
 use App\Http\Controllers\Api\V1\Gateway\AdminApprovalGatewayController;
+use App\Http\Controllers\Api\V1\Gateway\RefreshTokenGatewayController;
 
 Route::prefix('gateway')->group(function () {
+    Route::post('/refresh', [RefreshTokenGatewayController::class, 'refresh']);
     Route::post('/login', [LoginGatewayController::class, 'login']);
     Route::post('logout', [LogoutGatewayController::class, 'logout']);
     Route::post('register/admin-one',[AdminRegistrationGatewayController::class, 'registerAdminOne']);

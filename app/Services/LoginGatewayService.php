@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 
 class LoginGatewayService
@@ -18,7 +19,7 @@ class LoginGatewayService
     }
 
 
-    public function loginToAuthService($mobile, $password)
+    public function loginToAuthService($mobile, $password): array
     {
         try {
             $response = $this->client->post(
@@ -50,6 +51,13 @@ class LoginGatewayService
                         'success' => false,
                         'message' => 'خطا در ارتباط با سرویس احراز هویت'
                     ])
+            ];
+        } catch (GuzzleException) {
+
+            return [
+                'success' => false,
+                'message' => 'خطای غیرمنتظره در ارتباط با سرویس احراز هویت',
+                'status' => 500
             ];
         }
     }

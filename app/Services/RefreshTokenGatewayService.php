@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 
-class LogoutGatewayService
+class RefreshTokenGatewayService
 {
     private Client $client;
 
@@ -19,11 +19,11 @@ class LogoutGatewayService
     }
 
 
-    public function logoutFromAuthService($token): array
+    public function refreshToken($token): array
     {
         try {
             $response = $this->client->post(
-                config('services.microservices.auth.url') . '/api/v1/auth/logout',
+                config('services.microservices.auth.url') . '/api/v1/refresh',
                 [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token,

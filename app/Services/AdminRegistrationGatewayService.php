@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 
 class AdminRegistrationGatewayService
@@ -26,7 +27,8 @@ class AdminRegistrationGatewayService
         $password,
         $password_confirmation,
         $role
-    ) {
+    ): array
+    {
         try {
             $endpoint = $this->getEndpointByRole($role);
 
@@ -63,6 +65,13 @@ class AdminRegistrationGatewayService
                         'success' => false,
                         'message' => 'خطا در ارتباط با سرویس احراز هویت'
                     ])
+            ];
+        } catch (GuzzleException) {
+
+            return [
+                'success' => false,
+                'message' => 'خطای غیرمنتظره در ارتباط با سرویس احراز هویت',
+                'status' => 500
             ];
         }
     }
