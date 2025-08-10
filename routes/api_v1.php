@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\V1\Gateway\LogoutGatewayController;
 use App\Http\Controllers\Api\V1\Gateway\AdminRegistrationGatewayController;
 use App\Http\Controllers\Api\V1\Gateway\AdminApprovalGatewayController;
 use App\Http\Controllers\Api\V1\Gateway\RefreshTokenGatewayController;
+use App\Http\Controllers\Api\V1\Gateway\InsuranceGatewayController ;
+use App\Http\Controllers\Api\V1\Gateway\PatientGatewayController  ;
 
 Route::prefix('gateway')->group(function () {
 
@@ -44,17 +46,47 @@ Route::prefix('gateway')->group(function () {
     });
 
     //  Patients Routes
+
     Route::group(['middleware' => 'permission:patients.view|patients.edit'], function () {
-        Route::get('/patients', function (Request $request) {
-            return response()->json(['message' => 'لیست بیماران (مشاهده)']);
-        });
+
+        Route::get('/patients', [PatientGatewayController::class, 'index']);
+
+        Route::get('/patients/{id}', [PatientGatewayController::class, 'show'])
+            ->where('id', '[0-9]+');
 
         Route::group(['middleware' => 'permission:patients.edit'], function () {
-            Route::post('/patients', function (Request $request) {
-                return response()->json(['message' => 'بیمار جدید ثبت شد (ویرایش)']);
-            });
+
+            Route::post('/patients', [PatientGatewayController::class, 'store']);
+
+            Route::put('/patients/{id}', [PatientGatewayController::class, 'update'])
+                ->where('id', '[0-9]+');
+
+            Route::delete('/patients/{id}', [PatientGatewayController::class, 'destroy'])
+                ->where('id', '[0-9]+');
         });
     });
+
+
+    //  Insurance Routes
+    Route::group(['middleware' => 'permission:insurances.view|insurances.edit'], function () {
+
+        Route::get('/insurances', [InsuranceGatewayController::class, 'index']);
+
+        Route::get('/insurances/{id}', [InsuranceGatewayController::class, 'show'])
+            ->where('id', '[0-9]+');
+
+        Route::group(['middleware' => 'permission:insurances.edit'], function () {
+
+            Route::post('/insurances', [InsuranceGatewayController::class, 'store']);
+
+            Route::put('/insurances/{id}', [InsuranceGatewayController::class, 'update'])
+                ->where('id', '[0-9]+');
+
+            Route::delete('/insurances/{id}', [InsuranceGatewayController::class, 'destroy'])
+                ->where('id', '[0-9]+');
+        });
+    });
+
 
 });
 

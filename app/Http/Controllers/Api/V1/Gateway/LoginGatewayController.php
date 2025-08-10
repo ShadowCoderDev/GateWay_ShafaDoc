@@ -15,13 +15,19 @@ class LoginGatewayController extends Controller
         $this->gatewayService = $gatewayService;
     }
 
-
     public function login(ApiLoginRequest $request)
     {
         $result = $this->gatewayService->loginToAuthService(
             $request->mobile,
             $request->password
         );
+
+        if (!isset($result['body']) || !isset($result['status_code'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'خطای داخلی سرور در پردازش درخواست'
+            ], 500);
+        }
 
         return response($result['body'], $result['status_code'])
             ->header('Content-Type', 'application/json');
